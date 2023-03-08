@@ -1,9 +1,10 @@
 import List from "./components/List";
+import Form from "./components/Form";
 
 export default () => {
     return (
         <div>
-            <h1>Hi there!</h1>
+            <Form />
             <List />
         </div>
     )
