@@ -1,10 +1,26 @@
+@import "variables"
+
 .App
-    margin: 50px auto
+    margin: auto
     width: 100%
     max-width: 1200px
 
+    .offer-wrapper
+        margin: auto
+        width: 100%
+        max-width: 800px
 
-.offer-wrapper
-    margin: 50px auto
-    width: 100%
-    max-width: 600px
+        display: flex
+        flex-direction: column
+        gap: 15px
+        padding: 15px
+
+@media (min-width: $width-breakpoint)
+    .App
+
+        .offer-wrapper
+            width: calc(100% - 400px)
+            float: left
+            max-width: initial
+            margin: 0
+            flex-grow: 1

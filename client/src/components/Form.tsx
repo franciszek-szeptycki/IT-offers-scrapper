@@ -1,7 +1,7 @@
 import React, {Dispatch, useContext, useRef, useState} from "react";
 import {useQuery} from "react-query";
 import axios from "axios";
-import {IParam} from "../assets/types";
+import {IInfo, IParam} from "../assets/types";
 import {ActionType, ActionTypes, StateType} from "../context/reducer";
 import {CompasIcon} from "../assets/icons";
 import toast from "react-hot-toast";
@@ -18,17 +18,19 @@ export default ({setParam, submit, state}: {setParam: Dispatch<ActionType>, subm
 
     const [isMenuHidden, setIsMenuHidden] = useState(false)
 
+    const handleSubmit = () => {
+        if (!state.TECH || !state.EXP || !state.CITY) return toast.error('Please select all options!')
+        setIsMenuHidden(true)
+        submit()
+    }
+
     return (
         <div className={`form ${isMenuHidden ? "hidden" : ""}`}>
             <button onClick={() => setIsMenuHidden(prev => !prev)} className="form__menu"><CompasIcon/></button>
             <ButtonsList name="tech" list={info.tech} cmd="SET_TECH" setParam={setParam}/>
             <ButtonsList name="experience" list={info.exp} cmd="SET_EXP" setParam={setParam}/>
             <ButtonsList name="city" list={info.city} cmd="SET_CITY" setParam={setParam}/>
-            <button onClick={() => {
-                submit()
-                if (!state.TECH || !state.EXP || !state.CITY) return toast.error('Please select all options!')
-                setIsMenuHidden(true)
-            }} className="form__submit">Submit</button>
+            <button onClick={handleSubmit} className="form__submit">Submit</button>
         </div>
     )
 }
@@ -47,12 +49,4 @@ const ButtonsList = ({name, list, cmd, setParam}: {name: string, list: IParam[],
             </div>
         </div>
     )
-}
-
-
-
-interface IInfo {
-    tech: IParam[]
-    exp: IParam[]
-    city: IParam[]
 }

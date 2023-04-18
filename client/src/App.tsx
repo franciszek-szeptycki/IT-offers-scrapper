@@ -17,13 +17,15 @@ export default () => {
         setOffers([])
 
         getOffers(setOffers, 'justjoin.it', `/api/just-join?tech=${TECH.just_join}&exp=${EXP.just_join}&city=${CITY.just_join}`, JustJoinItOffer)
-        getOffers(setOffers, 'nofluffjobs.com', `/api/no-fluff-jobs?tech=${TECH.just_join}&exp=${EXP.just_join}&city=${CITY.just_join}`, NoFluffJobsOffer)
+        getOffers(setOffers, 'nofluffjobs.com', `/api/no-fluff-jobs?tech=${TECH.no_fluff_jobs}&exp=${EXP.no_fluff_jobs}&city=${CITY.no_fluff_jobs}`, NoFluffJobsOffer)
     }
 
 
     return (
         <div className="App" >
+
             <Form submit={handleSubmit} setParam={dispatch} state={state}/>
+
             <div className="offer-wrapper" >
                 <h1>Offers</h1>
                 {TECH?.name && <p>technology: {TECH.name}</p>}
@@ -32,6 +34,7 @@ export default () => {
                 <p>offers: {offers.length}</p>
                 {offers.map((offer: ReactElement) => offer)}
             </div>
+
         </div>
     )
 }

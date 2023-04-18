@@ -41,3 +41,9 @@ export interface INoFLuffJobsOffer {
     title: string
     url: string
 }
+
+export interface IInfo {
+    tech: IParam[]
+    exp: IParam[]
+    city: IParam[]
+}

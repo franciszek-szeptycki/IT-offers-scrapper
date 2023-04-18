@@ -8,16 +8,14 @@ def get_just_join(tech, exp, city):
     offers = requests.get('https://justjoin.it/api/offers').json()
     matches = []
     for offer in offers:
-        # AVAILABLE
-        # if offer['display_offer'] is False:
-        #     continue
         # CITY
-        if standarize(offer['city']) != city:
+        if standarize(offer['city']) not in city:
             continue
         # TECH
         if standarize(offer['marker_icon']) != tech:
             continue
         # EXP
+        print(offer['experience_level'])
         if standarize(offer['experience_level']) != exp:
             continue
         # APPEND MATCHED OFFER
@@ -36,9 +34,11 @@ def get_no_fluff_jobs(tech, exp, city):
         html_doc = requests.get(url)
         soup = BeautifulSoup(html_doc.text, 'html.parser')
 
-        stat_offers = soup.find('div', {'class': 'list-container'})
+        if "Brak wyników wyszukiwania" in soup.text:
+            break
 
         try:
+            stat_offers = soup.find('div', {'class': 'list-container'})
             offers = stat_offers.find_all('a', {'class': 'posting-list-item'})
 
             for offer in offers:

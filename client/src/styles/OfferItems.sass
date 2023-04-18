@@ -1,11 +1,20 @@
+@import "variables"
+
 .offer
     width: 100%
+
+    background-color: white
 
     display: flex
     align-items: center
     flex-wrap: wrap
     gap: 10px
     padding: 10px
+
+    transition: .1s
+
+    &:hover
+        box-shadow: 0 0 1px 1px $secondary-color
 
     &__img
         width: 60px
@@ -18,35 +27,24 @@
         grid-template-rows: auto auto
         gap: 5px
 
-    &__salary
-        font-size: 0.7rem
-        font-weight: 600
-        color: #32c432
-
-
-.jjit-offer
-
-    &__info
-        flex-grow: 1
-        display: grid
-        grid-template-rows: auto auto
-        gap: 5px
+        &-title
+            word-break: break-word
 
     &__salary
         font-size: 0.7rem
         font-weight: 600
         color: #32c432
 
+@media (min-width: $width-breakpoint)
+    .offer
+        padding: 30px
+        gap: 30px
 
-.nfj-offer
+        &__img
+            width: 100px
+            max-height: 60px
 
-    &__info
-        flex-grow: 1
-        display: grid
-        grid-template-rows: auto auto
-        gap: 5px
-
-    &__salary
-        font-size: 0.7rem
-        font-weight: 600
-        color: #32c432
+        &__info
+            &-title
+                font-weight: 600
+                font-size: 1.1rem
