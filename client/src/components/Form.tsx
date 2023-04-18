@@ -38,13 +38,18 @@ export default ({setParam, submit, state}: {setParam: Dispatch<ActionType>, subm
 
 const ButtonsList = ({name, list, cmd, setParam}: {name: string, list: IParam[], cmd: ActionTypes, setParam: Dispatch<ActionType>}) => {
 
+    const [selected, setSelected] = useState<IParam | null>(null)
+
     return (
         <div className="form__category">
             <p className="form__category-title">{name}</p>
             <div className="form__category-btns">
                 {list?.map((item: IParam, key: number) =>
-                    <button key={key} onClick={() => setParam({type: cmd, item: item})}
-                            className="form__category-btns-item" >{item.name}
+                    <button key={key} onClick={() => {
+                        setParam({type: cmd, item: item})
+                        setSelected(item)
+                    }} className={`form__category-btns-item ${item === selected ? "active" : ""}`} >
+                        {item.name}
                     </button>)}
             </div>
         </div>

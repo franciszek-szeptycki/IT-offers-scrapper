@@ -15,7 +15,6 @@ def get_just_join(tech, exp, city):
         if standarize(offer['marker_icon']) != tech:
             continue
         # EXP
-        print(offer['experience_level'])
         if standarize(offer['experience_level']) != exp:
             continue
         # APPEND MATCHED OFFER

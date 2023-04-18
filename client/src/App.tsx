@@ -27,11 +27,7 @@ export default () => {
             <Form submit={handleSubmit} setParam={dispatch} state={state}/>
 
             <div className="offer-wrapper" >
-                <h1>Offers</h1>
-                {TECH?.name && <p>technology: {TECH.name}</p>}
-                {EXP?.name && <p>experience: {EXP.name}</p>}
-                {CITY?.name && <p>city: {CITY.name}</p>}
-                <p>offers: {offers.length}</p>
+                <h1>Offers {offers.length && `(${offers.length})`}</h1>
                 {offers.map((offer: ReactElement) => offer)}
             </div>
 
