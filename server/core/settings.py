@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1)lrpqpue%mh^6gked@uf008x12f=$dwcrg1!(1vn!#e3sf+^g
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['it-offers-scrapper.onrender.com', '0.0.0.0', '127.0.0.1']
+ALLOWED_HOSTS = ['it-offers-scrapper.onrender.com', '0.0.0.0', '127.0.0.1', 'localhost']
 
 
 # Application definition

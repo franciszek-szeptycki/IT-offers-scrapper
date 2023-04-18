@@ -1,0 +1,22 @@
+@import "variables"
+
+
+.main
+    margin: auto
+    width: 100%
+    max-width: 800px
+
+    //.offer-wrapper
+    display: flex
+    flex-direction: column
+    gap: $main-gap
+    padding: $main-gap
+
+
+@media (min-width: $width-breakpoint)
+    .offer-wrapper
+        width: calc(100% - 400px)
+        float: left
+        max-width: initial
+        margin: 0
+        flex-grow: 1

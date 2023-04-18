@@ -1,9 +1,11 @@
 import Form from "./components/Form";
-import {Dispatch, ReactElement, useReducer, useState} from "react";
+import React, {Dispatch, ReactElement, useReducer, useState} from "react";
 import {reducer} from "./context/reducer";
 import toast from "react-hot-toast";
 import {JustJoinItOffer, NoFluffJobsOffer} from "./components/OfferItems";
 import axios from "axios";
+import getOffers from "./features/getOffers";
+import Main from "./components/Main";
 
 export default () => {
 
@@ -26,26 +28,8 @@ export default () => {
 
             <Form submit={handleSubmit} setParam={dispatch} state={state}/>
 
-            <div className="offer-wrapper" >
-                <h1>Offers {offers.length && `(${offers.length})`}</h1>
-                {offers.map((offer: ReactElement) => offer)}
-            </div>
+            <Main offers={offers} />
 
         </div>
     )
-}
-
-
-export const getOffers = async (setOffers: Dispatch<ReactElement[]>, name: string, path: string, OfferItem: any) => {
-    const toastId = toast.loading(`Fetching ${name} offers...`)
-
-    axios.get(path)
-        // .then((res) => {console.log(res)})
-        // @ts-ignore
-        .then(({data}) => setOffers(prev => [...prev, ...data.map((offer: any) => <OfferItem key={offer.id} data={offer} />)]))
-        .then(() => {
-            toast.success(`Fetched offers from ${name}!`)
-        })
-        .catch(err => err.response.status === 404 ? toast.error(`No offers found on ${name}!`) : toast.error(`Network error!`))
-        .finally(() => toast.dismiss(toastId))
 }

@@ -10,7 +10,7 @@ export default ({setParam, submit, state}: {setParam: Dispatch<ActionType>, subm
 
     // INFO FROM DB ABOUT AVAILABLE CITIES, TECHNOLOGIES, EXPERIENCE
     const [info, setInfo] = useState<IInfo>({tech: [], exp: [], city: []})
-    useQuery("info", () => axios.get("/api/info"), {
+    useQuery("info", () => axios.get("/api/info/"), {
         onSuccess: (({data}) => setInfo(data)),
         refetchOnWindowFocus: false,
     })
