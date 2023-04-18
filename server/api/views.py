@@ -12,47 +12,33 @@ def info(req):
     tech = Tech.objects.all()
     city = City.objects.all()
 
-    expSerializer = ExpSerializer(exp, many=True)
-    techSerializer = TechSerializer(tech, many=True)
-    citySerializer = CitySerializer(city, many=True)
+    exp_serializer = ExpSerializer(exp, many=True)
+    tech_serializer = TechSerializer(tech, many=True)
+    city_serializer = CitySerializer(city, many=True)
 
-    return Response(data={'exp': expSerializer.data, 'tech': techSerializer.data, 'city': citySerializer.data}, status=200)
+    return Response(data={'exp': exp_serializer.data, 'tech': tech_serializer.data, 'city': city_serializer.data}, status=200)
 
 
 @api_view(['GET'])
 def just_join(req):
+    tech = req.GET.get('tech')
+    exp = req.GET.get('exp')
+    city = req.GET.get('city')
 
-    try:
-        tech = req.GET.get('tech')
-        exp = req.GET.get('exp')
-        cities = req.GET.get('cities').split()
+    offers = get_just_join(tech, exp, city)
 
-        if not tech or not exp:
-            raise AttributeError
-
-    except AttributeError:
-        return Response({'message': 'Missing parameters!'}, status=400)
-
-    else:
-        offers = get_just_join(tech, exp, cities)
-        if not offers:
-            return Response({'message': 'No offers found!'}, status=404)
-        return Response(data=offers, status=200)
+    if len(offers) == 0:
+        return Response({'message': 'No offers found!'}, status=404)
+    return Response(data=offers, status=200)
 
 
 @api_view(['GET'])
 def no_fluff_jobs(req):
-    try:
-        tech = req.GET.get('tech')
-        exp = req.GET.get('exp')
-        cities = req.GET.get('cities').split()
+    tech = req.GET.get('tech')
+    exp = req.GET.get('exp')
+    city = req.GET.get('city')
 
-        if not tech or not exp:
-            raise AttributeError
-    except AttributeError:
-        return Response({'message': 'Missing parameters!'}, status=400)
-    else:
-        offers = get_no_fluff_jobs(tech, exp, cities)
-        if not offers:
-            return Response({'message': 'No offers found!'}, status=404)
-        return Response(data=offers, status=200)
+    offers = get_no_fluff_jobs(tech, exp, city)
+    if not offers:
+        return Response({'message': 'No offers found!'}, status=404)
+    return Response(data=offers, status=200)

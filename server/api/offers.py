@@ -4,12 +4,15 @@ from bs4 import BeautifulSoup
 from .utils import standarize, nfj_salary
 
 
-def get_just_join(tech, exp, cities):
+def get_just_join(tech, exp, city):
     offers = requests.get('https://justjoin.it/api/offers').json()
     matches = []
     for offer in offers:
+        # AVAILABLE
+        # if offer['display_offer'] is False:
+        #     continue
         # CITY
-        if standarize(offer['city']) not in cities:
+        if standarize(offer['city']) != city:
             continue
         # TECH
         if standarize(offer['marker_icon']) != tech:
@@ -17,43 +20,42 @@ def get_just_join(tech, exp, cities):
         # EXP
         if standarize(offer['experience_level']) != exp:
             continue
+        # APPEND MATCHED OFFER
         matches.append(offer)
     return matches
 
 
-def get_no_fluff_jobs(tech, exp, cities):
+def get_no_fluff_jobs(tech, exp, city):
     matched = []
-
-    criteria = ""
-    if len(cities) > 1:
-        criteria += "city%3D" + ",".join(cities[1:]) + "%20%20"
-    criteria += f"seniority%3D{exp}"
-
     page = 0
 
     while True:
         page += 1
-        url = f'https://nofluffjobs.com/pl/{cities[0]}/{tech}?criteria={criteria}&page={page}'
+        url = f'https://nofluffjobs.com/pl/{city}/{tech}?criteria=seniority%3D{exp}&page={page}'
 
         html_doc = requests.get(url)
         soup = BeautifulSoup(html_doc.text, 'html.parser')
 
-        offers = soup.find_all('a', {'class': 'posting-list-item'})
-        if offers == []:
+        stat_offers = soup.find('div', {'class': 'list-container'})
+
+        try:
+            offers = stat_offers.find_all('a', {'class': 'posting-list-item'})
+
+            for offer in offers:
+                salary = nfj_salary(offer.find("span", {"class": "salary"}).text.strip())
+                phrase = offer.find('div', {'class': 'ng-star-inserted'}).text.strip().split('  ')
+                matched.append({
+                    'url': offer.get('href'),
+                    'title': phrase[0],
+                    'company': phrase[-1],
+                    'salary': {
+                        "from": salary[0],
+                        "to": salary[1],
+                    },
+                })
+        except AttributeError:
             break
 
-        for offer in offers:
-            salary = nfj_salary(offer.find("span", {"class": "salary"}).text.strip())
-            phrase = offer.find('div', {'class': 'ng-star-inserted'}).text.strip().split('  ')
-            matched.append({
-                'url': offer.get('href'),
-                'title': phrase[0],
-                'company': phrase[1],
-                'salary': {
-                    "from": salary[0],
-                    "to": salary[1],
-                },
-            })
     return matched
 
 

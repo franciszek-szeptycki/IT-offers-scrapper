@@ -1,45 +1,58 @@
-import {useContext, useRef, useState} from "react";
-import {Context} from "../context";
+import React, {Dispatch, useContext, useRef, useState} from "react";
 import {useQuery} from "react-query";
 import axios from "axios";
+import {IParam} from "../assets/types";
+import {ActionType, ActionTypes, StateType} from "../context/reducer";
+import {CompasIcon} from "../assets/icons";
+import toast from "react-hot-toast";
 
-export default () => {
+export default ({setParam, submit, state}: {setParam: Dispatch<ActionType>, submit: () => void, state: StateType}) => {
 
+    // INFO FROM DB ABOUT AVAILABLE CITIES, TECHNOLOGIES, EXPERIENCE
     const [info, setInfo] = useState<IInfo>({tech: [], exp: [], city: []})
+    useQuery("info", () => axios.get("/api/info"), {
+        onSuccess: (({data}) => setInfo(data)),
+        refetchOnWindowFocus: false,
+    })
 
-    useQuery("info", () => axios.get("/api/info").then(({data}) => setInfo(data)))
 
-    const {dispatch} = useContext(Context)
+    const [isMenuHidden, setIsMenuHidden] = useState(false)
 
     return (
-        <div className="form">
-            <div className="form__tech">
-                {info.tech.map((tech: InfoElementType, key: number) => (
-                    <div className="form__tech-item" key={key} onClick={() => dispatch({type: "ADD_TECH", payload: tech })} >
-                        <img src={tech.image} alt={tech.name} />
-                    </div>))}
-            </div>
-            <div>
-                {info.exp.map((exp: InfoElementType, key: number) => <button key={key} onClick={() => dispatch({type: "ADD_EXP", payload: exp })} >{exp.name}</button>)}
-            </div>
-            <div>
-                {info.city.map((city: InfoElementType, key: number) => <button key={key} onClick={() => dispatch({type: "ADD_CITY", payload: city })} >{city.name}</button>)}
+        <div className={`form ${isMenuHidden ? "hidden" : ""}`}>
+            <button onClick={() => setIsMenuHidden(prev => !prev)} className="form__menu"><CompasIcon/></button>
+            <ButtonsList name="tech" list={info.tech} cmd="SET_TECH" setParam={setParam}/>
+            <ButtonsList name="experience" list={info.exp} cmd="SET_EXP" setParam={setParam}/>
+            <ButtonsList name="city" list={info.city} cmd="SET_CITY" setParam={setParam}/>
+            <button onClick={() => {
+                submit()
+                if (!state.TECH || !state.EXP || !state.CITY) return toast.error('Please select all options!')
+                setIsMenuHidden(true)
+            }} className="form__submit">Submit</button>
+        </div>
+    )
+}
+
+
+const ButtonsList = ({name, list, cmd, setParam}: {name: string, list: IParam[], cmd: ActionTypes, setParam: Dispatch<ActionType>}) => {
+
+    return (
+        <div className="form__category">
+            <p className="form__category-title">{name}</p>
+            <div className="form__category-btns">
+                {list?.map((item: IParam, key: number) =>
+                    <button key={key} onClick={() => setParam({type: cmd, item: item})}
+                            className="form__category-btns-item" >{item.name}
+                    </button>)}
             </div>
         </div>
     )
 }
 
-interface IInfo {
-    tech: InfoElementType[]
-    exp: InfoElementType[]
-    city: InfoElementType[]
-}
 
-export type InfoElementType = {
-    id: number
-    name: string
-    just_join: string
-    no_fluff_jobs: string
-    pracuj: string
-    image?: string
+
+interface IInfo {
+    tech: IParam[]
+    exp: IParam[]
+    city: IParam[]
 }
