@@ -16,7 +16,6 @@ export default ({offers}: {offers: ReactElement[]}) => {
                     <p className="main__info-subtext">Zmodyfikuj kryteria i kliknij przecisk "SZUKAJ"</p>
                 </div>)
             }
-
             {offers}
         </main>
     )
