@@ -3,7 +3,7 @@ import {useQuery} from "react-query";
 import axios from "axios";
 import {IInfo, IParam} from "../assets/types";
 import {ActionType, ActionTypes, StateType} from "../context/reducer";
-import {CompasIcon} from "../assets/icons";
+import {CompasIcon, SearchIcon} from "../assets/icons";
 import toast from "react-hot-toast";
 
 export default ({setParam, submit, state}: {setParam: Dispatch<ActionType>, submit: () => void, state: StateType}) => {
@@ -27,10 +27,15 @@ export default ({setParam, submit, state}: {setParam: Dispatch<ActionType>, subm
     return (
         <div className={`form ${isMenuHidden ? "hidden" : ""}`}>
             <button onClick={() => setIsMenuHidden(prev => !prev)} className="form__menu"><CompasIcon/></button>
-            <ButtonsList name="tech" list={info.tech} cmd="SET_TECH" setParam={setParam}/>
-            <ButtonsList name="experience" list={info.exp} cmd="SET_EXP" setParam={setParam}/>
-            <ButtonsList name="city" list={info.city} cmd="SET_CITY" setParam={setParam}/>
-            <button onClick={handleSubmit} className="form__submit">Submit</button>
+
+            <ButtonsList name="technologia" list={info.tech} cmd="SET_TECH" setParam={setParam}/>
+            <ButtonsList name="doświadczenie" list={info.exp} cmd="SET_EXP" setParam={setParam}/>
+            <ButtonsList name="lokalizacja" list={info.city} cmd="SET_CITY" setParam={setParam}/>
+
+            <button onClick={handleSubmit} className="form__submit">
+                <SearchIcon/>
+                Szukaj
+            </button>
         </div>
     )
 }
