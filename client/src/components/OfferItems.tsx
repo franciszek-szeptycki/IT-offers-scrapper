@@ -12,6 +12,7 @@ export const JustJoinItOffer = ({data}: { data: IJustJoinOffer }) => (
             <p className="offer__info-company">{formatText(data.company_name)}</p>
         </div>
 
+        {/* salary + employment type */}
         <div className="offer__salary">
             {data.employment_types.map((item, key  :number ) =>
                 (<p key={key} className="jjit-offer__salary-info">

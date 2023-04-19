@@ -6,12 +6,16 @@ export default async (setOffers: Dispatch<ReactElement[]>, name: string, path: s
     const toastId = toast.loading(`Fetching ${name} offers...`)
 
     axios.get(path)
-        // .then((res) => {console.log(res)})
-        // @ts-ignore
+        // @ts-ignore Adding fetched data to offers
         .then(({data}) => setOffers(prev => [...prev, ...data.map((offer: any) => <OfferItem key={offer.id} data={offer} />)]))
+        // notifying --> offers found
         .then(() => {
             toast.success(`Fetched offers from ${name}!`)
         })
-        .catch(err => err.response.status === 404 ? toast.error(`No offers found on ${name}!`) : toast.error(`Network error!`))
+        // notifying --> no offers found
+        .catch(err => err.response.status === 404 && toast.error(`No offers found on ${name}!`))
+        // notifying --> network error
+        .catch(() => toast.error(`Network error!`))
+        // dismissing loading toast
         .finally(() => toast.dismiss(toastId))
 }

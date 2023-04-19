@@ -16,6 +16,7 @@ export type StateType = {
     TECH: IParam | null,
     CITY: IParam | null,
 }
+
 export type ActionType = {
     type: ActionTypes,
     item: IParam
