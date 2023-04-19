@@ -14,6 +14,7 @@
     right: 0
 
     background-color: $primary-color
+    @include border-design
 
     display: flex
     flex-direction: column
@@ -65,13 +66,16 @@
             gap: calc($main-gap / 3 * 2)
 
             &-item.active
-                transform: translateY(-2px)
+                //transform: translateY(-2px)
 
                 background-color: $secondary-color
                 color: white
 
             &-item
                 border: 1px solid $secondary-color
+                border-radius: 10px
+                box-shadow: 0 1px 3px 0 lightgray
+
                 background-color: transparent
 
                 padding: 3px 10px
@@ -80,7 +84,8 @@
                 transition: .2s
 
                 &:hover
-                    transform: scale(1.05)
+                    background-color: $secondary-color
+                    color: $primary-color
 
     &__submit
         margin: $main-gap 0
@@ -91,6 +96,8 @@
         font-size: 1.2rem
         color: $secondary-color
         background-color: transparent
+
+        @include border-design
 
         display: flex
         align-items: center
