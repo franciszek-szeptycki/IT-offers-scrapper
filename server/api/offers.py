@@ -9,7 +9,7 @@ def get_just_join(tech, exp, city):
     matches = []
     for offer in offers:
         # CITY
-        if standarize(offer['city']) not in city:
+        if standarize(offer['city']) not in city and standarize(offer['workplace_type']) not in city:
             continue
         # TECH
         if standarize(offer['marker_icon']) != tech:
